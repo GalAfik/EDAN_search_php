@@ -17,10 +17,11 @@ function _get_nonce($length = 8){
 }
 
 //authorization settings
-$host = 'http://edanexample.si.edu/';
+$config = require('config.php');
+$host = $config->host;
 $endpoint = 'metadata/v1.1/metadata/search';
-$appId = 'your_app_id_here';
-$authKey = 'your_secret_key_here';
+$appId = $config->app_id;
+$authKey = $config->auth_key;
 // search query
 $query = 'rows=1&fqs=' . urlencode('["type:' . $_GET["type"] . '"]');
 // $query = 'id=' . urlencode($_GET["id"]);
