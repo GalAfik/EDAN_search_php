@@ -16,15 +16,18 @@ function _get_nonce($length = 8){
     return $return;
 }
 
+
 //authorization settings
 $config = require('config.php');
 $host = $config->host;
-$endpoint = 'metadata/v1.1/metadata/search';
+$endpoint = 'metadata/v1.1/metadata/search.htm';
 $appId = $config->app_id;
 $authKey = $config->auth_key;
-// search query
-$query = 'rows=1&fqs=' . urlencode('["type:' . $_GET["type"] . '"]');
-// $query = 'id=' . urlencode($_GET["id"]);
+$query = isset($_POST['query']) ? $_POST['query'] : "";
+// $query = 'rows=1&fqs=' . urlencode('["type:' . $_GET["type"] . '"]');
+// $query = 'rows=1&s=' . urlencode('["type:' . $_GET["type"] . '"]');
+// $query = (isset($_GET["id"]) ? 'id=' . urlencode($_GET["id"]) : '') . (isset($_GET["url"]) ? '&url=' . urlencode($_GET["url"]) : '');
+// $query = (isset($_GET["type"]) ? 'type=' . urlencode($_GET["type"]) : '') . (isset($_GET["start"]) ? '&start=' . urlencode($_GET["start"]) : '') . (isset($_GET["rows"]) ? '&rows=' . urlencode($_GET["rows"]) : '') . (isset($_GET["status"]) ? '&status=' . urlencode($_GET["status"]) : '');
 $nonce = _get_nonce(15);
 date_default_timezone_set('America/New_York');
 $date = date('Y-m-d H:i:s');
@@ -53,6 +56,36 @@ curl_close($curl);
 
 $json = json_decode($resp, true);
 
-// do whatever you want with json here
+?>
 
-dumper($resp);
+
+
+<html>
+<head>
+    <link rel='stylesheet' type='text/css' href='style.css'>
+</head>
+<body>
+
+    <div class='form'>
+        <form action="#" method="POST">
+            <textarea name="query" placeholder="Query" rows="10" value="Mickey" style="width: 90%; margin: 5%;"></textarea>
+            <input type="submit" value="Submit">
+        </form> 
+    </div>
+
+    <div class='result'>
+        <textarea><? echo $resp; ?></textarea>
+    </div>
+
+    <div>
+        <?php
+
+        foreach ($json['rows'] as $key => $record) {
+            echo $record['id'] . '<br>';
+        }
+
+        ?>
+    </div>
+
+</body>
+</html>
