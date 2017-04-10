@@ -66,26 +66,42 @@ $json = json_decode($resp, true);
 </head>
 <body>
 
-    <div class='form'>
+    <div class="form-tab">
+        <button class="tablinks" onclick="openTab(event, 'field-search')">Field Search</button>
+        <button class="tablinks" onclick="openTab(event, 'query-search')">Query Search</button>
+    </div>
+
+    <div id="field-search" class='form-tabcontent'>
+
+    </div>
+
+    <div id="query-search" class='form-tabcontent'>
         <form action="#" method="POST">
             <textarea name="query" placeholder="Query" rows="10" value="Mickey" style="width: 90%; margin: 5%;"></textarea>
             <input type="submit" value="Submit">
         </form> 
     </div>
 
-    <div class='result'>
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'json')">JSON</button>
+        <button class="tablinks" onclick="openTab(event, 'search-results')">Structured Search</button>
+    </div>
+
+    <div id= 'json' class='tabcontent'>
         <textarea><? echo $resp; ?></textarea>
     </div>
 
-    <div>
-        <?php
-
-        foreach ($json['rows'] as $key => $record) {
-            echo $record['id'] . '<br>';
-        }
-
-        ?>
+    <div id='search-results' class='tabcontent'>
+        <textarea>
+        <?php if (isset($json['rows'])){
+            foreach ($json['rows'] as $key => $record) {
+                echo $record['id'] . "\n";
+            }
+        }?>
+        </textarea>
     </div>
+
+    <script type="text/javascript" src="tabs.js"></script>
 
 </body>
 </html>
