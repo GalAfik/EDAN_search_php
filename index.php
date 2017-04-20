@@ -24,11 +24,8 @@ $endpoint = 'metadata/v1.1/metadata/search.htm';
 $appId = $config->app_id;
 $authKey = $config->auth_key;
 $query = isset($_POST['query']) ? $_POST['query'] : "";
-// $query = 'rows=1&fqs=' . urlencode('["type:' . $_GET["type"] . '"]');
-// $query = 'rows=1&s=' . urlencode('["type:' . $_GET["type"] . '"]');
-// $query = (isset($_GET["id"]) ? 'id=' . urlencode($_GET["id"]) : '') . (isset($_GET["url"]) ? '&url=' . urlencode($_GET["url"]) : '');
-// $query = (isset($_GET["type"]) ? 'type=' . urlencode($_GET["type"]) : '') . (isset($_GET["start"]) ? '&start=' . urlencode($_GET["start"]) : '') . (isset($_GET["rows"]) ? '&rows=' . urlencode($_GET["rows"]) : '') . (isset($_GET["status"]) ? '&status=' . urlencode($_GET["status"]) : '');
-$nonce = _get_nonce(15);
+$encodedQuery = urlencode($query);
+
 date_default_timezone_set('America/New_York');
 $date = date('Y-m-d H:i:s');
 
@@ -44,7 +41,7 @@ curl_setopt_array($curl, array(
         'X-RequestDate:' . $date,
         'X-AuthContent:' . $authContent,
         'X-Nonce:' . $nonce,
-    ),
+        ),
     CURLOPT_RETURNTRANSFER => 1,
     CURLOPT_URL => $host . $endpoint . (isset($query) ? '?' . $query : ''),
     ));
@@ -59,7 +56,6 @@ $json = json_decode($resp, true);
 ?>
 
 
-
 <html>
 <head>
     <link rel='stylesheet' type='text/css' href='style.css'>
@@ -67,34 +63,51 @@ $json = json_decode($resp, true);
 <body>
 
     <div class="form-tab">
-        <button class="formlinks" onclick="openFormTab(event, 'field-search')">Field Search</button>
-        <button class="formlinks" onclick="openFormTab(event, 'query-search')">Query Search</button>
+        <button class="formlinks" onclick="openFormTab(event, 'field-search')">Search</button>
+        <button class="formlinks" onclick="openFormTab(event, 'collections-search')">Collections URL</button>
+        <button class="formlinks" onclick="openFormTab(event, 'query-search')">Raw Query</button>
+        <button class="formlinks" onclick="openFormTab(event, 'encoded-search')">Encoded Query</button>
     </div>
 
-    <div id="field-search" class='formcontent'>
+    <form action="#" method="POST">
 
-    </div>
-
-    <div id="query-search" class='formcontent'>
-        <form action="#" method="POST">
-            <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="query" placeholder="Query" rows="10" value="Mickey" style="width: 90%; margin: 5%;"><? echo $query; ?></textarea>
+        <div id="encoded-search" class='formcontent' style="display: none;">
+            <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="encoded_query" placeholder="URL Encoded Query" rows="10" style="width: 90%; margin: 5%;"><? echo $encodedQuery; ?></textarea>
             <input type="submit" value="Submit">
-        </form> 
-    </div>
+        </div>
 
+        <div id="query-search" class='formcontent' style="display: none;">
+            <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="query" placeholder="Query" rows="10" style="width: 90%; margin: 5%;"><? echo $query; ?></textarea>
+            <input type="submit" value="Submit">
+        </div>
+
+        <div id="collections-search" class='formcontent' style="display: none;">
+            <p>Enter a collections.si.edu URL in the field below to view it's search results.</p>
+            <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="collections_url" placeholder="URL" rows="10" style="width: 90%; margin: 5%;"></textarea>
+            <input type="submit" value="Submit">
+        </div>
+
+        <div id="field-search" class='formcontent' style="display: block;">
+            Record Type:
+            <select>
+                <option value="edanmdm">edanmdm</option>
+                <option value="ogmt">ogmt</option>
+            </select>
+
+        </div>
+    </form>
 
 
     <div class="tab">
-        <button class="tablinks" onclick="openTab(event, 'json')">JSON</button>
-        <button class="tablinks" onclick="openTab(event, 'search-results')">Structured Search</button>
+        <button class="tablinks" onclick="openTab(event, 'search-results')">Search Results</button>
+        <button class="tablinks" onclick="openTab(event, 'json')">Raw JSON</button>
     </div>
 
-    <div id= 'json' class='tabcontent'>
+    <div id= 'json' class='tabcontent' style="display: none;">
         <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"><? echo $resp; ?></textarea>
     </div>
 
-    <div id='search-results' class='tabcontent'>
-        <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <div id='search-results' class='tabcontent' style="display: block;">
         <?php if (isset($json['rows'])){
             foreach ($json['rows'] as $key => $record) {
                 echo $record['content']['descriptiveNonRepeating']['online_media']['media']['thumbnail'] . "\n";
@@ -102,7 +115,6 @@ $json = json_decode($resp, true);
                 echo '-----------------------------------';
             }
         }?>
-        </textarea>
     </div>
 
     <script type="text/javascript" src="tabs.js"></script>

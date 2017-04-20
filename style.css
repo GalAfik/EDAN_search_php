@@ -49,6 +49,7 @@
 	height: 100%;
 	resize: none;
 	padding: 1em;
+	overflow: scroll;
 }
 
 .formcontent textarea {
@@ -69,7 +70,7 @@ body {
 	background-color: lightgray;
 }
 
-form > *{
+.formcontent > *{
 	margin-left: 5%;
 	margin-right: 5%;
 }
