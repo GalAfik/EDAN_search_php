@@ -67,20 +67,22 @@ $json = json_decode($resp, true);
 <body>
 
     <div class="form-tab">
-        <button class="tablinks" onclick="openTab(event, 'field-search')">Field Search</button>
-        <button class="tablinks" onclick="openTab(event, 'query-search')">Query Search</button>
+        <button class="formlinks" onclick="openFormTab(event, 'field-search')">Field Search</button>
+        <button class="formlinks" onclick="openFormTab(event, 'query-search')">Query Search</button>
     </div>
 
-    <div id="field-search" class='form-tabcontent'>
+    <div id="field-search" class='formcontent'>
 
     </div>
 
-    <div id="query-search" class='form-tabcontent'>
+    <div id="query-search" class='formcontent'>
         <form action="#" method="POST">
-            <textarea name="query" placeholder="Query" rows="10" value="Mickey" style="width: 90%; margin: 5%;"></textarea>
+            <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="query" placeholder="Query" rows="10" value="Mickey" style="width: 90%; margin: 5%;"><? echo $query; ?></textarea>
             <input type="submit" value="Submit">
         </form> 
     </div>
+
+
 
     <div class="tab">
         <button class="tablinks" onclick="openTab(event, 'json')">JSON</button>
@@ -88,14 +90,16 @@ $json = json_decode($resp, true);
     </div>
 
     <div id= 'json' class='tabcontent'>
-        <textarea><? echo $resp; ?></textarea>
+        <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"><? echo $resp; ?></textarea>
     </div>
 
     <div id='search-results' class='tabcontent'>
-        <textarea>
+        <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         <?php if (isset($json['rows'])){
             foreach ($json['rows'] as $key => $record) {
-                echo $record['id'] . "\n";
+                echo $record['content']['descriptiveNonRepeating']['online_media']['media']['thumbnail'] . "\n";
+                echo $record['content']['descriptiveNonRepeating']['title']['content'] . "\n";
+                echo '-----------------------------------';
             }
         }?>
         </textarea>

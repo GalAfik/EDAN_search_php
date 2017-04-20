@@ -51,7 +51,7 @@
 	padding: 1em;
 }
 
-.form-tabcontent textarea {
+.formcontent textarea {
 	resize: none;
 }
 
@@ -60,7 +60,7 @@ body {
 	margin:0;
 }
 
-.form-tabcontent {
+.formcontent {
 	width: 50%;
 	height: 95.5%;
 	position: absolute;
