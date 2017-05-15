@@ -5,6 +5,7 @@
 	left: 50%;
 	display: none;
 	top: 4.5%;
+	overflow-y: scroll;
 }
 
 .tab {
@@ -49,7 +50,7 @@
 	height: 100%;
 	resize: none;
 	padding: 1em;
-	overflow: scroll;
+	overflow: auto;
 }
 
 .formcontent textarea {
@@ -68,6 +69,7 @@ body {
 	left: 0%;
 	top: 4.5%;
 	background-color: lightgray;
+	overflow-y: scroll;
 }
 
 .formcontent > *{
@@ -77,4 +79,18 @@ body {
 
 #json, #query-search {
 	display: block;
+}
+
+.description {
+	font-size: 0.9em;
+	color: gray;
+}
+
+.label {
+	font-weight: bold;
+}
+
+input {
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
